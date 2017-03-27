@@ -30,7 +30,6 @@ var googleapis  = require('googleapis'),
     gaExecuteQuery = function(args, callback, cache, retryCount){
         retryCount = retryCount || 0;
         concurrentUp();
-        console.log(args);
         var endpoint = googleapis.analytics('v3').data.ga;
         if (args.metrics.startsWith('rt:')) {
           endpoint = googleapis.analytics('v3').data.realtime;
