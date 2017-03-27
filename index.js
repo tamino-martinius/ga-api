@@ -30,7 +30,12 @@ var googleapis  = require('googleapis'),
     gaExecuteQuery = function(args, callback, cache, retryCount){
         retryCount = retryCount || 0;
         concurrentUp();
-        googleapis.analytics('v3').data.ga.get(args, function(err, result) {
+        console.log(args);
+        var endpoint = googleapis.analytics('v3').data.ga;
+        if (args.metrics.startsWith('rt:')) {
+          endpoint = googleapis.analytics('v3').data.realtime;
+        }
+        endpoint.get(args, function(err, result) {
             concurrentDown();
             if(err) {
                 //  403 error: we probably just need to wait 1 sec...
@@ -132,7 +137,7 @@ module.exports = function(args, callback, settings){
         };
 
     //  Check we have required values
-    _.each(['ids', 'startDate', 'endDate', 'metrics'], function(value, key){
+    _.each(['ids', 'metrics'], function(value, key){
         if(!args[value]) {
             callback("Missing argument for " + value);
             return false;
